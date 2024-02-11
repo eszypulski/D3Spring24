@@ -10,4 +10,4 @@ My coursework for DATA 70600: Computational Fundamentals, Spring 2024.
 
 ![An awkward young girl](/images/1998---%20Betsy.jpg)
 
-*I mainly used it to build frame-ridden, brown and magenta (???) websites to document inside jokes between me and my friends.*
+*Note: I mainly used it to build frame-ridden, brown and magenta (???) websites with my friends.*
