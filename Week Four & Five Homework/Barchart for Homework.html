@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>The number of photos in my phone of ten people I love, listed by how much time I spend with them</title>
+        <script type="text/javascript" src= "https://d3js.org/d3.v7.min.js"></script>
+        <link rel="stylesheet" href="styles.css">
+         
+    </head>
+    <body>
+        <script type="text/javascript">
+       
+        //Declare consts/global variables
+
+ 
+
+        const margin =50;
+        const width = 1000 - margin;
+        const height = 500;
+        const padding = .03;  
+
+
+
+        //Load data and related variables
+        d3.csv("photos.csv").then(data => {
+            console.log("data", data)
+        //format data
+        data.forEach(d => { 
+            d.person = d.person;
+            d.photos = +d.photos; 
+        });
+
+        const maxY = d3.max(data, d => d.photos);
+
+
+        //Scales - note: band and linear
+        const xScale = d3.scaleBand()
+                        .domain(data.map(d => d.person))
+                        .range([margin, width - margin])
+                        .paddingInner(padding);
+        
+        const yScale = d3.scaleLinear()
+                        .domain([0, maxY]) 
+                        .range([height - margin, margin]);
+        
+
+        //SVG
+        const svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+                    
+        //Axes - create and implement x/y axes
+
+
+        const bottomAxis = d3.axisBottom()
+                             .scale(xScale);
+        
+        svg.append("g")
+            .attr("transform", "translate(0," + (height - margin) + ")") 
+            .call(bottomAxis); 
+        ;
+        const leftAxis = d3.axisLeft()
+                           .scale(yScale);
+
+        svg.append("g")
+            .attr("transform", "translate(" + margin + ",0)")
+            .call(leftAxis); 
+        
+        //Bars
+        svg.selectAll("rect") 
+            .data(data) 
+            .enter()
+            .append("rect")
+            .attr("x", d => xScale(d.person)) 
+            .attr("y", d => yScale(d.photos)) 
+            .attr("width", xScale.bandwidth())
+            .attr("height", d => (height-margin) - yScale(d.photos))
+            .attr("fill", "cadetblue");
+            
+        
+
+                    //add text// 
+svg.append("text")
+	.text("The number of photos in my phone of ten people I love, listed by how much time I spend with them")
+	.attr("x", 20)
+	.attr("y", 20);
+
+
+                
+    });
+        </script>
+    </body>
+</html>
