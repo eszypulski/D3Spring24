@@ -2,6 +2,3 @@ I decided to do a bar chart showing the number of pictures I have in iCloud of v
 
 I also am curious about how I could use CSS to select all the elements. The SVG text at the top picked up the italics I applied, but not a (hideous) blue color I tried and ditched.
 
-Here's my work:
-
-!(Week Four & Five Homework/screenshot.png)
