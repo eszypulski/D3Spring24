@@ -47,6 +47,11 @@
                     .attr("width", width)
                     .attr("height", height);
 
+                    //add text// 
+svg.append("text")
+	.text("This is text")
+	.attr("x", 20)
+	.attr("y", 20);
                     
         //Axes - create and implement x/y axes
         const bottomAxis = d3.axisBottom()
