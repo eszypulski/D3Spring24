@@ -12,4 +12,4 @@ For this assignment, I visualized how the Consumer Price Index (CPI) for food he
 - A few visual nuances - I'd love to add another horizontal line (and maybe fill) to mark where the numbers go into the negatives.
 
 ### Screenshot
-![a line graph comparing the percentage increase of the CPI of food consumed at home with food consumed not at home](Homework 3/screenshot.png)
+![a line graph comparing the percentage increase of the CPI of food consumed at home with food consumed not at home](screenshot.png)
