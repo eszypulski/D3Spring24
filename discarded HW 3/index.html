@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<title>Homework 3</title>
+<script src="https://d3js.org/d3.v4.js"></script>
+<style type="text/css">
+/*will add stylesheet here*/
+
+</style>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+
+//consts live here
+    // can update width and height here
+        const svgW = 1000;
+        const svgH = 1000;   
+    //blob path points     
+        const blob = ["M41,73 C69,73 82,46 75,29 C69,12 60,0 32,0 C4,0 0,26 0,44 C0,61 13,73 41,73 Z"];
+        const size = 300;
+        const sizeY = 300;
+
+
+// my data
+d3.csv("blobdata.csv").then(data => {
+    console.log ("data", data)
+    ata.forEach(d => {
+        d.activity =d.activity;
+        d.time = +d.time;
+    });
+
+
+// set up color scale
+const maxData = d3.max(data, d=>d.time);
+        const minData = d3.min(data, d=>d.time);
+        const rowLength = data.length;//
+        const blobColor = d3.scaleLinear()
+                          .domain([minData, maxData])
+                          //.domain([0, maxData])
+                          .range(["gray", "black"]);
+
+
+// placing svg
+        const svg = d3.select("body")
+                .append("svg")
+                .attr("width", svgW)
+                .attr("height", svgH);
+
+
+// blobs group
+
+const g =svg.selectAll("g") //g is for group
+    .data (data)
+    .enter()
+    .append("g")
+    .attr ("transform", (d,i)=>{
+        //this arranges into row. taken from the hearts code, but I would like to change it.
+        const x = (i % rowLength) * size; 
+                          const y = (Math.floor(i/rowLength)+1) * sizeY;
+                          console.log("xy", [x,y])
+                          return "translate(" + [x,y] + ")";})
+    
+
+
+//blobs
+g.append("path")
+.attr("d", blob)
+attr("fill", d=> blobColor (d.time));
+
+
+
+
+//color
+
+//const color = d3.scaleOrdinal(["a", "b", "c", "d", "e", "f", "g"], ["red", "orange", "yellow", "green", "blue", "purple", "magenta"]);
+
+
+//data 
+
+
+
+//  points for my blob      
+
+
+
+       
+
+
+
+// styling the svg blob       
+/*svg.append("path")
+          .attr("d", blob)
+          .attr("fill", "blue");*/
+    });
+  
+</script>
+</body>

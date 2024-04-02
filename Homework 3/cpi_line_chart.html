@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Consumer Price Index Percent Change, 2002 - 2022</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,700;1,400&family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cpi_styles.css">
+
+</head>
+
+<body>
+    <div id="top">
+        <h1>Consumer Price Index:</br>Food <span class="athome">at Home</span> and <span class="notathome">Not at
+                Home</span></h1>
+        <h3>Percent Change Year to Year, 2002 - 2022</h3>
+    </div>
+    <div id="d3Stuff">
+        <script type="text/javascript">
+
+            //Consts
+            const w = 800;
+            const h = 500;
+            const margin = 50;
+            const parseTime = d3.timeParse("%Y");//time parser - changed to just show the year
+    
+
+
+            /* Data - percent change to the U.S. Consumer Price Index (CPI) for food (at home and out of home) between 2002 and 2022. 
+            Source: https://www.ers.usda.gov/data-products/food-price-outlook.aspx */
+
+            d3.csv("cpi_change.csv").then(data => {
+                console.log("data", data)
+
+                data.forEach(d => {
+                    d.year = parseTime(d.year);
+                    d.food_away_from_home = +d.food_away_from_home;
+                    d.food_at_home = +d.food_at_home;
+                });
+
+
+                //scales - x scale set by year, y scale set manually
+                const xScale = d3.scaleTime()
+                    .domain(d3.extent(data, d => d.year))
+                    .range([margin, w - margin]);
+
+                const yScale = d3.scaleLinear()
+                    .domain([-2, 12])
+                    .range([h - margin, margin]);
+
+                //SVG
+                const svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+
+                //bottom axis
+                const bottomAxis = d3.axisBottom()
+                    .scale(xScale)
+                    .tickFormat(d3.timeFormat("%Y"));
+
+
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(0," + (h - margin) + ")")
+                    .call(bottomAxis);
+
+                //left axis
+                const leftAxis = d3.axisLeft()
+                    .scale(yScale);
+
+
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(" + margin + ",0)")
+                    .call(leftAxis);
+
+
+                //food at home
+                const line = d3.line()
+
+                    .x(d => xScale(d.year))
+                    .y(d => yScale(d.food_at_home));
+
+                //line
+                svg.append("path")
+                    .attr("d", line(data))
+                    .attr("class", "line")
+                    .attr ("id", "athome")
+
+                console.log("path", line(data))
+
+
+                //food away from home
+                const line2 = d3.line()
+
+                    .x(d => xScale(d.year))
+                    .y(d => yScale(d.food_away_from_home));
+
+                //line
+                svg.append("path")
+                    .attr("d", line2(data))
+                    .attr("class", "line")
+                    .attr ("id","notathome")
+
+                console.log("path", line2(data))
+
+ //Code below adapted from: https://www.visualcinnamon.com/2015/09/placing-text-on-arcs/
+
+//Create an SVG text element and append a textPath element
+svg.append("text")
+   .append("textPath") //append a textPath to the text element
+    .attr("xlink:href", "#athome") //place the ID of the path here
+    .attr ("class","pathtext")
+
+    .attr("startOffset", "90%")
+    .text("Food consumed at home");
+
+
+
+
+            });
+
+
+
+
+        </script>
+    </div>
+</body>
+
+</html>

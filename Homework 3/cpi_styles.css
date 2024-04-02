@@ -1,0 +1,84 @@
+body {
+    background-color: #2D3047;
+}
+
+#top {
+    width: 800px;
+
+    text-align: center;
+}
+
+h1 {
+    color:#d9cfc4;
+    font-size: 40px;
+    font-family: "Alegreya", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 120%;
+    padding-bottom: 0px;
+    margin-bottom: 2px;
+}
+
+h3 {
+    color:#A799B7;
+    font-family: "Alegreya", serif;
+    font-size: 26px;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+    margin-top: 10px;
+}
+.axis path, 
+.axis line{
+    stroke:#d9cfc4;
+    stroke-width: 3px;
+}
+
+.axis text{
+    font-family: "Alegreya Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 15px;
+    fill: #d9cfc4;
+    }
+
+.line {
+    fill: none; 
+    stroke: #E0CA3C; 
+    stroke-width: 4px;
+    stroke-linecap: round;
+    stroke-dasharray: 1 8;
+  
+
+}
+#athome {
+    stroke: #048A81;
+    color:#048A81;
+}
+
+#notathome {
+   stroke: #E0CA3C; 
+    color:#E0CA3C;
+}
+.athome {
+    fill: #048A81;
+    color:#048A81;
+}
+
+
+.pathtext {
+    line-height: 300%;
+    padding-bottom: 30px;
+    font-family: "Alegreya Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 15px;
+    fill: #d9cfc4;
+    background-color: aquamarine;
+
+}
+.notathome {
+    fill: #E0CA3C; 
+    color:#E0CA3C;
+}
