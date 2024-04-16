@@ -106,6 +106,23 @@
                 .attr("transform", "translate(" + margin + ",0)")
                 .call(leftAxis);
 
+                  //x-axis label
+                  svg.append("text")
+                    .attr("x", w / 2)
+                    .attr("y", h - 5)
+                    .attr("class", "axis_label")
+                    .attr("id", "xAxisLabel")
+                    .text("year")
+
+                //y-axis label
+                svg.append("text")
+                    .attr("x", 0) //how to place 
+                    .attr("y", w - 500)
+                    .attr("class", "axis_label")
+                    .attr("id", "xAxisLabel")
+                    .attr("transform", "rotate(-90, 20, 300)")
+                    .text("percent change");
+
             //NEW(ish) create a function in which we make our line
             function drawData(which) {
 
