@@ -8,10 +8,10 @@ How to feed myself and my kid is a topic of interest 3-5 times a day. I wanted t
 I got my data by using this tool: [FDA MyPlate Calculator](https://www.myplate.gov/myplate-plan).
 
 ### Screenshot of what I did
-![a circle graph showing the recommended food intake for a toddler](Homework 5/screenshot.png)
+![a circle graph showing the recommended food intake for a toddler](screenshot.png)
 
 ### Screenshot of my attempt to have two visualizations
-![a circle graph showing the recommended food intake for a toddler](Homework 5/screenshot_fail.png)
+![a circle graph showing the recommended food intake for a toddler](screenshot_fail.png)
 
 ### Things I want to do...
 -  Figure out how to have multiple visualizations within one SVG and move each one where I wish
