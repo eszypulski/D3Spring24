@@ -1,0 +1,32 @@
+body {
+    background-color: #372C3B;
+    margin:50px;
+}
+.labels{
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+  }
+
+  .toddler {
+    font-size: 35px;
+    font-family: "Madimi One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    fill:#FFF6F3;
+    opacity: .85;
+  
+
+
+  }
+
+  .sidenote {
+    font-size: 18px;
+    font-family: "Barlow", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    fill:#FFF6F3;
+    opacity: .75;
+  
+
+  }

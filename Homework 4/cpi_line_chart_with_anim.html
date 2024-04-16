@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Consumer Price Index Percent Change, 2002 - 2022</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,700;1,400&family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="cpi_styles.css">
+
+</head>
+
+<body>
+    <div id="top">
+        <h1>Consumer Price Index:</br>Food Consumed <span class="athome">at Home</span> and <span class="notathome">Away from
+                Home</span></h1>
+        <h3>Percent Change Year to Year, 2002 - 2022</h3>
+        <P>Toggle visibility:
+            <button id="buttonNotAtHome">🚗 Food Away from Home </button>
+            <button id="buttonHome">🏠 Food at Home</button>
+            (
+            <button class="subcategory" id="buttonFruit">🍊 Fruits</button>
+            <button class="subcategory" id="buttonVeg">🥬  Vegetables</button>
+            <button class="subcategory" id="buttonMeat">🥩  Meat</button>
+            <button class="subcategory" id="buttonDairy">🧀  Dairy</button>)
+        </P>
+    </div>
+    <div id="d3Stuff">
+        <script type="text/javascript">
+
+            //Consts
+            const w = 800;
+            const h = 500;
+            const margin = 50;
+            const parseTime = d3.timeParse("%Y");//time parser - changed to just show the year
+     
+
+
+
+            /* Data - percent change to the U.S. Consumer Price Index (CPI) for food (at home and out of home) between 2002 and 2022. 
+            Source: https://www.ers.usda.gov/data-products/food-price-outlook.aspx */
+
+            d3.csv("cpi_change.csv").then(data => {
+                console.log("data", data)
+
+                data.forEach(d => {
+                    d.year = parseTime(d.year);
+                    d.away = +d.away;
+                    d.home = +d.home;
+                });
+
+
+                //scales - x scale set by year, y scale set manually
+                const xScale = d3.scaleTime()
+                    .domain(d3.extent(data, d => d.year))
+                    .range([margin, w - margin]);
+
+                const yScale = d3.scaleLinear()
+                    .domain([-2, 12])
+                    .range([h - margin, margin]);
+
+                //SVG
+                const svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+
+
+                //negative percent change
+                svg.append("rect")
+                    .attr("x", 50)
+                    .attr("y", 392)
+                    .attr("width", w - 98)
+                    .attr("height", 55)
+                    .attr("id", "negative")
+
+
+                //bottom axis
+                const bottomAxis = d3.axisBottom()
+                    .scale(xScale)
+                    .tickFormat(d3.timeFormat("%Y"));
+
+
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(0," + (h - margin) + ")")
+                    .call(bottomAxis);
+
+                //left axis
+                const leftAxis = d3.axisLeft()
+                    .scale(yScale);
+
+
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(" + margin + ",0)")
+                    .call(leftAxis);
+
+
+
+
+
+
+                //food at home
+                const line = d3.line()
+
+                    .x(d => xScale(d.year))
+                    .y(d => yScale(d.food_at_home));
+                
+                    const homeGroup = svg.append("g")
+
+                //food at home line
+                homeGroup.append("path")
+                    .attr("d", line(data))
+                    .attr("class", "line")
+                    .attr("id", "athome")
+
+                console.log("path", line(data))
+
+                //food at home label
+                homeGroup.append("text")
+
+                    .attr("y", 60)
+                    .attr("x", 740)
+                    .attr("class", "athome line_label_text")
+                    .text("🏠")
+
+
+                //food away from home
+                const line2 = d3.line()
+
+                    .x(d => xScale(d.year))
+                    .y(d => yScale(d.food_away_from_home));
+
+
+                    const awayGroup = svg.append("g")
+
+
+                //line
+                awayGroup.append("path")
+                    .attr("d", line2(data))
+                    .attr("class", "line")
+                    .attr("id", "notathome")
+
+                console.log("path", line2(data))
+                //food away from home label
+                awayGroup.append("text")
+                    .attr("y", 172)
+                    .attr("x",738)
+                    .attr("class", "notathome line_label_text")
+                    .text("🚗")
+
+                //x-axis label
+                svg.append("text")
+                    .attr("x", w / 2)
+                    .attr("y", h - 5)
+                    .attr("class", "axis_label")
+                    .attr("id", "xAxisLabel")
+                    .text("year")
+
+                //y-axis label
+                svg.append("text")
+                    .attr("x", 0) //how to place 
+                    .attr("y", w - 500)
+                    .attr("class", "axis_label")
+                    .attr("id", "xAxisLabel")
+                    .attr("transform", "rotate(-90, 20, 300)")
+                    .text("percent change");
+
+
+                    
+                //button
+
+                d3.selectAll("button").on("click", (event, d) => {
+                    const selected = event.currentTarget;
+                    if (selected.id == "buttonNotAtHome") {
+                        drawData("food_away_from_home")
+                    } else if (selected.id == "buttonHome") {
+                        drawData("food_at_home")
+                  
+                    }
+                })
+
+               
+
+
+            });
+
+
+
+
+        </script>
+    </div>
+</body>
+
+</html>

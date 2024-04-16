@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>attempt to quantify an ideal toddler diet</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="food_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;1,300&family=Madimi+One&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <!--<div id="contentDiv">
+    <h3>What a Toddler is Supposed to Eat</h3>
+    <p><a href="https://www.myplate.gov/myplate-plan/">(According to the FDA)</a></p></div><-->
+    <script type="text/javascript">
+
+
+        //Data
+        /*data generated from the USDA's "My Plate" tool https://www.myplate.gov/myplate-plan/ and information about my family*/
+
+        d3.csv("food.csv").then(data => {
+            console.log("data", data)
+
+            //format data
+            data.forEach(d => {
+                d.food = d.food;
+                d.toddler = +d.toddler;
+                //.mom = +d.mom;
+                //d.dad = +d.dad;
+            });
+
+            //declare consts
+            const w = 500;
+            const h = 500
+                ;
+            const myColor = d3.scaleOrdinal(["#FA9657", "#6eae92", "#FFD394", "#EB7464", "#FFF6F3"]);
+
+            //Radius information
+
+            const outerRadius = 250;
+            //const outerRadiusMom = 440;
+            //const outerRadiusDad = 480;
+            const innerRadius = outerRadius / 1.75;
+            //const innerRadiusMom = outerRadiusMom / 2;
+            //const innerRadiusDad = outerRadiusDad / 2;
+
+            //Toddler Chart
+
+            //create wedges
+            const arc = d3.arc()
+                .innerRadius(innerRadius)//required 
+                .outerRadius(outerRadius) //required
+                .cornerRadius(50); //make the wedges blobby
+
+
+            //pie generator
+            const pie = d3.pie().value(d => d.toddler)
+                .padAngle(.035);
+
+            //SVG
+            const svg = d3.select("body")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+            svg.append("text")
+                .attr("y", innerRadius + innerRadius/1.5)
+                .attr("x", innerRadius-3)
+                .attr("class", "toddler")
+                //attr("textLength",100)
+                //.attr ("lengthAdjust", "spacingAndGlyphs")
+                .text("What Toddlers")
+
+                svg.append("text")
+                .attr("y", innerRadius + innerRadius/1.5 + 35)
+                .attr("x", innerRadius + 18)
+                .attr("class", "toddler")
+                //attr("textLength",100)
+                //.attr ("lengthAdjust", "spacingAndGlyphs")
+                .text("Should Eat *")
+
+
+
+            svg.append("text")
+                .attr("y", 300)
+                .attr("x",innerRadius + 60 )
+                .attr("class", "sidenote")
+                .attr("xmlns:xlink", "https://www.myplate.gov/myplate-plan/")
+                .text("*supposedly")
+
+
+
+
+
+            //groups 
+            const groups = svg.selectAll("g.arc")
+                .data(pie(data))
+                .enter()
+                .append("g")
+                .attr("class", "arc")
+                .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");//arcs transform translate 
+
+            console.log("pie data", pie(data));
+
+            groups.append("path")
+                .attr("fill", (d, i) => myColor(i))
+                .attr("d", arc);
+
+            //Labels
+            groups.append("text")
+                .attr("transform", d => "translate(" + arc.centroid(d) + ")")
+                .attr("text-anchor", "middle")
+                .attr("class", "labels")
+                .text(d => d.data.food);
+
+            /*
+                           //Mom Chart
+            
+                        //create wedges
+                        const arcMom = d3.arc()
+                            .innerRadius(innerRadiusMom)//required 
+                            .outerRadius(outerRadiusMom) //required
+                            .cornerRadius(50); //make the wedges blobby
+                        
+            
+            
+                        //pie generator
+                        const pieMom = d3.pie().value(d => d.mom)
+                            .padAngle(.035);
+                       
+            
+                        //SVG
+                        const svgMom = d3.select("body")
+                            .append("svg")
+                            .attr("width", w)
+                            .attr("height", h)
+                          
+            
+                        //groups 
+                        const groupsMom = svg.selectAll("g.arc")
+                            .data(pie(data))
+                            .enter()
+                            .append("g")
+                            .attr("class", "arc")
+                            .attr("transform", "translate(" + outerRadiusMom + "," + outerRadiusMom + ")");
+                        console.log("pie data", pie(data));
+            
+                        groups.append("path")
+                            .attr("fill", (d, i) => myColor(i))
+                            .attr("d", arcMom);*/
+
+            //Labels
+            groups.append("text")
+                .attr("transform", d => "translate(" + arcMom.centroid(d) + ")")
+                .attr("text-anchor", "middle")
+                .attr("class", "labels")
+          
+                .text(d => d.data.food);
+
+
+
+
+        })
+
+    </script>
+</body>
+
+</html>
