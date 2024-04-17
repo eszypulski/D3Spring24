@@ -177,6 +177,18 @@
                     
                 //button
 
+                d3.selectAll("button").on("click", (event, d) => {
+                    const selected = event.currentTarget;
+                    if (selected.id == "buttonNotAtHome") {
+                        drawData("food_away_from_home")
+                    } else if (selected.id == "buttonHome") {
+                        drawData("food_at_home")
+                  
+                    }
+                })
+
+               
+
 
             });
 

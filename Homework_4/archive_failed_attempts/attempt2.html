@@ -53,7 +53,7 @@
 
         
             data.forEach(d => {
-                    d.year = parseTime(d.year);
+                    d.date = parseTime(d.date);
                     d.away = +d.away;
                     d.home = +d.home;
                     d.fruit = +d.fruit;
@@ -66,7 +66,7 @@
 
             //scales
             const xScale = d3.scaleTime()
-                .domain(d3.extent(data, d => d.year))
+                .domain(d3.extent(data, d => d.date))
                 .range([margin, w - margin]);
 
             const yScale = d3.scaleLinear()

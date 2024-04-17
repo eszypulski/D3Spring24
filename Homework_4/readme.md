@@ -1,18 +1,15 @@
 ## Homework 4
 
-I can't get this to work!
+Thanks again for your help with this! I got it to work pretty quickly after we spoke.
 
-### What I wanted to do
-I tried to add buttons that would display different data. I tried multiple ways, including starting from scratch, editing the week 9 example code, and more, and kept having trouble making anything appear.
+### What this is
+I expanded the graph I created in Homework 3 to include more granular data - prices of different types of groceries. I also added the button functionality and the transition, which I think drives home the differences within the data. (And is also satisfying to look at.)
+### Screenshot 
+![a graph with no data](screenshot.gif)
 
-### Screenshot of what I did
-![a graph with no data](screenshot.png)
-
-### What I did accomplish
-I did...
-- Create buttons (just decorative at this point, but...)
-- Expand my data set
-- Learn that emoji can go in CSV
-- Figure out how to create axis labels, hooray
-- Add a shaded area to show the negative percent change
+### Observations + Questions
+- This and Homework 5 are the first visualization I've created that taught me something about the data -- I was surprised how volatile the prices for fruits and vegetables were compared to the averages. I expected the relationships between them to be visually clearer.
+- I'm also very curious about what the 2023 data will say - you can see the spike in 2021-2022, and I expect that that's only increased.
+- Getting the CSV into the form I wanted it to took a while, since the sheet I originally got my data from (https://www.ers.usda.gov/data-products/food-price-outlook.aspx) had a structure that didn't match an easy conversion to CSV. I think I probably need to dig into some things on Excel next time I encounter a source like this.
+- If I were making this again, I'd like to experiment with a way to have multiple lines show up at once. Instead of drawing the line with a function, I suppose I could give each line an ID and use javascript to hide that element? I might make a visualization like that part of my final project. It would be fun to use SVG blend modes with overlapping lines.
 

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Consumer Price Index Percent Change, 2002 - 2022</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,300;0,400;0,700;1,400&family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="cpi_styles.css">
+
+</head>
+
+<body>
+
+    <!--Header-->
+    <div id="top">
+        <h1>Consumer Price Index:</br>Food Consumed at and Away
+                from
+                Home</span></h1>
+        <h3>Percent Change Year to Year, 2002 - 2022</h3>
+        <P>Show me:
+            <!--Buttons-->
+            <button id="buttonAway">🚗 Food Away from Home </button>
+            <button id="buttonHome">🏠 Food at Home</button>
+            (
+            <button class="subcategory" id="buttonFruit">🍊 Fruits</button>
+            <button class="subcategory" id="buttonVeg">🥬 Vegetables</button>
+            <button class="subcategory" id="buttonMeat">🥩 Meat</button>
+            <button class="subcategory" id="buttonDairy">🧀 Dairy</button>)
+        </P>
+    </div>
+
+
+    <script type="text/javascript">
+
+        //Consts/global variables  
+        const w = 800;
+        const h = 550;
+        const margin = 50;
+        const parseTime = d3.timeParse("%Y");//time parser - changed to just show the year
+
+
+        /* Data - percent change to the U.S. Consumer Price Index (CPI) for food (at home and out of home) between 2002 and 2022. 
+        Source: https://www.ers.usda.gov/data-products/food-price-outlook.aspx */
+
+        d3.csv("cpi_change.csv").then(data => {
+            console.log("data", data)
+
+        
+            data.forEach(d => {
+                    d.date = parseTime(d.date);
+                    d.away = +d.away;
+                    d.home = +d.home;
+                    d.fruit = +d.fruit;
+                    d.veg = +d.veg;
+                    d.dairy = +d.dairy;
+                    d.meat = +d.meat;
+                });
+
+
+
+            //scales
+            const xScale = d3.scaleTime()
+                .domain(d3.extent(data, d => d.date))
+                .range([margin, w - margin]);
+
+            const yScale = d3.scaleLinear()
+                .domain([d3.min(data, d => Math.min(d.away, d.home, d.fruit, d.veg, d.meat, d.dairy)), d3.max(data, d => Math.max(d.away, d.home, d.fruit, d.veg, d.meat, d.dairy))])
+                .range([h - margin, margin]);
+
+            //SVG
+            const svg = d3.select("body")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+               
+            //bottom axis 
+            const bottomAxis = d3.axisBottom()
+                .scale(xScale)
+                .tickFormat(d3.timeFormat("%Y"));
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(0," + (h - margin) + ")")
+                .call(bottomAxis); 
+            //left axis
+            const leftAxis = d3.axisLeft()
+                .scale(yScale);
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(" + margin + ",0)")
+                .call(leftAxis);
+
+                  //x-axis label
+                  svg.append("text")
+                    .attr("x", w / 2)
+                    .attr("y", h - 5)
+                    .attr("class", "axis_label")
+                    .attr("id", "xAxisLabel")
+                    .text("year")
+
+
+                //y-axis label
+                svg.append("text")
+                    .attr("x", 0) //how to place 
+                    .attr("y", w - 500)
+                    .attr("class", "axis_label")
+                    .attr("id", "xAxisLabel")
+                    .attr("transform", "rotate(-90, 20, 300)")
+                    .text("percent change");
+
+            //NEW(ish) create a function in which we make our line
+            function drawData(which) {
+
+                //NEW(ish)line generator a function to change y
+                const coords = d3.line()
+                    .x(d => xScale(d.date))
+                    .y(function (d) {
+                        if (which == "away") { return yScale(d.away) }
+                        else if (which == "home") { return yScale(d.home) }
+                        else if (which == "fruit") { return yScale(d.fruit) }
+                        else if (which == "veg") { return yScale(d.veg) }
+                        else if (which == "meat") { return yScale(d.meat) }
+                        else if (which == "") { return yScale(d.home) }
+                        else { return yScale(d.dairy) }
+                    });
+
+//NEW(ish) line with join, transition, and optional easing!
+                const line = svg.selectAll(".line")
+                .data([data])    
+                .join("path")//join!!
+                .transition() //to animate transitions
+                .duration(400) //determines how long transition takes in milliseconds. Include after transition. (1000ms = 1s)
+                .delay(0)
+                .ease(d3.easeLinear) 
+               //.ease(d3.easeBounceIn)
+                //.ease(d3.easeElasticIn)
+                .attr("d", coords)
+                .attr("class", "line");
+               
+            }
+
+            //NEW: buttons with .on and data change
+            d3.selectAll("button").on("click", (event, d)=>{
+                const selected = event.currentTarget;
+                if (selected.id == "buttonHome") {
+                    drawData("home")
+                } else if (selected.id == "buttonAway") {
+                    drawData("away")
+                } else if (selected.id == "buttonFruit") {
+                    drawData("fruit")
+                } else if (selected.id == "buttonVeg") {
+                    drawData("veg")
+                } else if (selected.id == "buttonMeat") {
+                    drawData("meat")
+                } else if (selected.id == "buttonDairy") {
+                    drawData("veg")
+                } else {
+                    drawData("home")
+                }
+            })
+
+               //negative percent change
+               svg.append("rect")
+                    .attr("x", 50)
+                    .attr("y", 338)
+                    .attr("width", w - 98)
+                    .attr("height", 162)
+                    .attr("id", "negative")
+
+/**/
+        });
+
+    </script>
+</body>
+
+</html>
